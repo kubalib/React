@@ -84,7 +84,7 @@ body {
 	text-rendering: optimizeLegibility;
 }
 
-.new-todo,
+.new-todo, 
 .edit {
 	position: relative;
 	margin: 0;
@@ -168,7 +168,7 @@ body {
 	padding: 0;
 }
 
-.todo-list li.editing .edit {
+.todo-list li .view .editing .edit {
 	display: block;
 	width: calc(100% - 43px);
 	padding: 12px 16px;
@@ -233,7 +233,7 @@ body {
 	color: #4d4d4d;
 }
 
-.todo-list li.completed label .description {
+.todo-list li .completed .description {
 	color: #cdcdcd;
 	text-decoration: line-through;
 }
