@@ -3,8 +3,8 @@ import classNames from "classnames";
 
 const Task = ({id, label, onDeleted}) => {
 
-  const [stateCompleted, setCompleted] = useState(false);
-  const [stateEditing, setEditing] = useState(false);
+  const [isCompleted, setCompleted] = useState(false);
+  const [isEditing, setEditing] = useState(false);
 
   const onCompletedClick = () => {
     setCompleted( (prevState) => !prevState );
@@ -12,8 +12,8 @@ const Task = ({id, label, onDeleted}) => {
 
 
   const liClass = classNames( {
-    completed: stateCompleted,
-    editing: stateEditing
+    completed: isCompleted,
+    editing: isEditing
   });
 
   return (
@@ -26,7 +26,7 @@ const Task = ({id, label, onDeleted}) => {
       <button className="icon icon-edit" ></button>
       <button className="icon icon-destroy" onClick={onDeleted}></button>
     </div>
-    {stateEditing && <input className="edit" type="text" defaultValue={label}  /> } 
+    {isEditing && <input className="edit" type="text" defaultValue={label}  /> } 
     </>
   );
 };
