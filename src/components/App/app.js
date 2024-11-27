@@ -25,6 +25,8 @@ const App = () => {
       createTodo('Active task')
    ]);
 
+   console.log(todos);
+
    const [filter, setFilter] = useState('all');
    
 
@@ -35,18 +37,8 @@ const App = () => {
    });
 
 
- // Это какая-то ЛАЖА (((
- // при повторном добавление задачи, не меняется id - он становиться одиковым для всех. Как еще можно реализовать добавление новой задачи. добавила form
-   const addTask = (e) => {
-      e.preventDefault();
-
-      if(e.target.elements.taskInput.value.trim() !== "") {
-         const newItem = createTodo(e.target.elements.taskInput.value);
-         console.log(newItem)
-
-         e.target.reset();
-         setTodos((prevState) =>  [...prevState, newItem] )
-      };
+   const addTask = (label) => {
+      setTodos((prevState) => [...prevState, createTodo(label)])
    };
    
 
