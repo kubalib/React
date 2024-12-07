@@ -7,15 +7,13 @@ import Footer from "../Footer";
 
 const App = () => {
 
-   let minId = 1;
-
-
    const createTodo = (label) => {
       return {
          label: label,
          isCompleted: false,
          isEditing: false,
-         id: minId++
+         timeOfCreation: new Date(), 
+         id: `${Date.now()}-${Math.random()}`
       }
    };
 
@@ -25,16 +23,24 @@ const App = () => {
       createTodo('Active task')
    ]);
 
-   console.log(todos);
-
-   const [filter, setFilter] = useState('all');
+   const [filterState, setFilter] = useState('all');
    
 
-   const filterTodos = todos.filter((el) => {
-      if(filter === "active") return !el.isCompleted;
-      if(filter === "completed") return el.isCompleted;
-      return true
-   });
+   const filteredTodos = () => {
+      switch(filterState) {
+         case "active":
+            return todos.filter((el) => !el.isCompleted);
+         case "completed" :
+            return todos.filter((el) => el.isCompleted);
+
+         default : 
+            return todos;
+      };
+   };
+
+   const completedFilter = () => setFilter('completed');
+   const activeFilter = () => setFilter('active');
+   const allFilter = () => setFilter('all');
 
 
    const addTask = (label) => {
@@ -42,16 +48,24 @@ const App = () => {
    };
    
 
-   const onCompletedClick = (id) => {
-      setTodos((prevState) => 
-         prevState.map((el) => el.id === id ? {...el, isCompleted: !el.isCompleted} : el)
-      );
-    };
+   // const onCompletedClick = (id) => {
+   //    setTodos((prevState) => 
+   //       prevState.map((el) => el.id === id ? {...el, isCompleted: !el.isCompleted} : el)
+   //    );
+   //  };
 
-    const onEditingClick = (id) => {
-      setTodos((prevState) => 
-         prevState.map((el) => el.id === id ? {...el, isEditing: !el.isEditing} : {...el, isEditing: false}))
-    };
+   // const onEditingClick = (id) => {
+   //    setTodos((prevState) => 
+   //       prevState.map((el) => el.id === id ? {...el, isEditing: !el.isEditing} : {...el, isEditing: false}))
+   //  };
+
+   const toggleProperty = (id , propsName) => {
+      setTodos((prevState) => prevState.map((el) => el.id === id ? {...el, [propsName]: !el[propsName]} : {...el, isEditing: propsName === "isEditing" ? false : el.isEditing}))
+   };
+
+   const onCompletedClick = (id) => toggleProperty(id, 'isCompleted');
+   const onEditingClick = (id) => toggleProperty(id, 'isEditing');
+
 
    const deleteTask = (id) => {
       setTodos((prevState) => prevState.filter((el) => el.id !== id));
@@ -62,8 +76,8 @@ const App = () => {
       setTodos((prevState) => prevState.filter((el) => !el.isCompleted));
    };
 
-   const completedCount = todos.filter((el) => el.isCompleted === true).length;
-   const activeTask = todos.length - completedCount;
+   const completedCount = todos.filter((el) => el.isCompleted).length;
+   const activeTasks = todos.length - completedCount;
 
 
    return (
@@ -76,16 +90,16 @@ const App = () => {
          </header>
          <section className="main">
             <TaskList 
-            todos={filterTodos}  
+            todos={filteredTodos()}  
             onDeleted={deleteTask}
-            onCompletedClick={onCompletedClick}
-            onEditingClick={onEditingClick} />
+            onCompletedClick={onCompletedClick} 
+            onEditingClick={onEditingClick}/>
             <Footer 
-            activeTask={activeTask} 
-            completedFilter={() => setFilter('completed')}
-            activeFilter={() => setFilter('active')}
-            allFilter={() => setFilter('all')}
-            filter={filter}
+            activeTasks={activeTasks} 
+            completedFilter={completedFilter}
+            activeFilter={activeFilter}
+            allFilter={allFilter}
+            filterState={filterState}
             clearCompleted={clearCompleted}
              />
          </section>
