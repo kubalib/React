@@ -9,9 +9,11 @@ const TaskList = ({
   onDeleted = () => {},
   onCompletedClick = () => {},
   onEditingClick = () => {},
+  startTimer,
+  pauseTimer
 }) => {
   const elements = todos.map((item) => {
-    const { id, label, isCompleted, isEditing, timeOfCreation } = item;
+    const { id, label, isCompleted, isEditing, timeOfCreation, duration, isTiming } = item;
 
     const liClass = classNames({
       completed: isCompleted,
@@ -35,6 +37,14 @@ const TaskList = ({
           }}
           isEditing={isEditing}
           isCompleted={isCompleted}
+          duration={duration}
+          isTiming={isTiming}
+          startTimer={() => {
+            return startTimer(id)
+          }}
+          pauseTimer={() => {
+            return pauseTimer(id)
+          }}
         />
       </li>
     );
@@ -49,13 +59,17 @@ TaskList.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       label: PropTypes.string.isRequired,
       isCompleted: PropTypes.bool.isRequired,
+      duration: PropTypes.number,
       isEditing: PropTypes.bool.isRequired,
       timeOfCreation: PropTypes.instanceOf(Date),
+    
     }),
   ),
   onDeleted: PropTypes.func,
   onCompletedClick: PropTypes.func,
   onEditingClick: PropTypes.func,
+  startTimer: PropTypes.func,
+  pauseTimer: PropTypes.func
 };
 
 export default TaskList;
