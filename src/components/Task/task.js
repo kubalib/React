@@ -81,9 +81,7 @@ const Task = ({
         <input  className="edit" 
           type="text" 
           defaultValue={label} 
-          // onChange={updateLabel} 
           onKeyDown={handleKeyDawn}
-          // autoFocus
         />}
     </>
   );
