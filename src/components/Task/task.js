@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { formatDistanceToNow, format } from "date-fns";
 import { ru } from "date-fns/locale";
@@ -17,31 +17,33 @@ const Task = ({
   duration, 
   isTiming,
   startTimer,
-  pauseTimer
+  pauseTimer,
+  updateTimer, 
+  onUpdateLabel
 }) => {
-  // const [time, setTime] = useState(duration);
 
-  // useEffect(() => {
-  //   setTime(duration);
-  // }, [duration]);
+  useEffect(() => {
+    if (!isTiming || isCompleted) {
+      return undefined
+    };
 
-  // useEffect(() => {
-  //   if (!isTiming || isCompleted) {
-  //     return undefined
-  //   };
+    const interval = setInterval(() => {
+      updateTimer()
+    }, 1000);
 
-  //   const interval = setInterval(() => {
-  //     setTime((prevTime) => prevTime + 1);
-  //   }, 1000);
+    return () => clearInterval(interval);
+  }, [isTiming, isCompleted]);
 
-  //   return () => clearInterval(interval);
-  // }, [isTiming, isCompleted]);
-
-  
   
   const formatTime = (seconds) => {
     return format(new Date(seconds * 1000), "mm:ss");
   };
+
+  const handleKeyDawn = (event) => {
+    if(event.key === "Enter" && event.target.value.trim()) {
+      onUpdateLabel(id, event.target.value.trim());
+    }
+  }
 
   return (
     <>
@@ -75,7 +77,14 @@ const Task = ({
           onClick={onDeleted}
         />
       </div>
-      {isEditing && <input className="edit" type="text" defaultValue={label} />}
+      {isEditing && 
+        <input  className="edit" 
+          type="text" 
+          defaultValue={label} 
+          // onChange={updateLabel} 
+          onKeyDown={handleKeyDawn}
+          // autoFocus
+        />}
     </>
   );
 };
@@ -92,7 +101,9 @@ Task.propTypes = {
   duration: PropTypes.number,
   isTiming: PropTypes.bool,
   startTimer: PropTypes.func,
-  pauseTimer: PropTypes.func
+  pauseTimer: PropTypes.func,
+  updateTimer: PropTypes.func,
+  onUpdateLabel: PropTypes.func
 };
 
 export default Task;

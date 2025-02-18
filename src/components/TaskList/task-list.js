@@ -10,7 +10,9 @@ const TaskList = ({
   onCompletedClick = () => {},
   onEditingClick = () => {},
   startTimer,
-  pauseTimer
+  pauseTimer,
+  updateTimer,
+  onUpdateLabel
 }) => {
   const elements = todos.map((item) => {
     const { id, label, isCompleted, isEditing, timeOfCreation, duration, isTiming } = item;
@@ -45,6 +47,8 @@ const TaskList = ({
           pauseTimer={() => {
             return pauseTimer(id)
           }}
+          updateTimer={() => updateTimer(id)}
+          onUpdateLabel={onUpdateLabel}
         />
       </li>
     );
@@ -69,7 +73,9 @@ TaskList.propTypes = {
   onCompletedClick: PropTypes.func,
   onEditingClick: PropTypes.func,
   startTimer: PropTypes.func,
-  pauseTimer: PropTypes.func
+  pauseTimer: PropTypes.func,
+  updateTimer: PropTypes.func,
+  onUpdateLabel: PropTypes.func
 };
 
 export default TaskList;

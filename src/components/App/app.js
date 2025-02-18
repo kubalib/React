@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 
 import NewTaskForm from "../NewTaskForm";
 import TaskList from "../TaskList";
@@ -23,38 +23,6 @@ const App = () => {
 
   const [filterState, setFilter] = useState("all");
 
-  useEffect(() => {
-    const activeTimers = todos.filter((task) => task.isTiming && !task.isCompleted);
-  
-    if (activeTimers.length === 0) return; 
-  
-    const interval = setInterval(() => {
-      setTodos((prevTodos) =>
-        prevTodos.map((task) =>
-          task.isTiming && !task.isCompleted
-            ? { ...task, duration: task.duration + 1 }
-            : task
-        )
-      );
-    }, 1000);
-  
-    return () => clearInterval(interval);
-  }, [todos]);
-  
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setTodos((prevState) => 
-  //       prevState.map((task) => {
-  //         if (task.isTiming  && !task.isCompleted) {
-  //           return { ...task, duration: task.duration + 1 };
-  //         }
-  //         return task;
-  //       })
-  //     )
-  //   }, 1000);
-    
-  //   return () => clearInterval(interval);
-  // }, []);
 
   const filteredTodos = () => {
     switch (filterState) {
@@ -92,6 +60,15 @@ const App = () => {
   const onCompletedClick = (id) =>  toggleProperty(id, "isCompleted");
   const onEditingClick = (id) => toggleProperty(id, "isEditing");
 
+  const onUpdateLabel = (id, newLabel) => {
+    setTodos((prevTodos) =>
+      prevTodos.map((task) =>
+        task.id === id ? { ...task, label: newLabel, isEditing: false } : task
+      )
+    );
+  };
+
+
   const toggleTimer = (id , isTiming ) => {
     setTodos((prevState) =>
       prevState.map((task) =>
@@ -99,6 +76,15 @@ const App = () => {
       )
     );
   };
+
+  const updateTimer = (id) => {
+    setTodos((prevState) =>
+      prevState.map((task) =>
+        task.id === id ? { ...task, duration: task.duration + 1 } : task
+      )
+    );
+  };
+
 
   const startTimer = (id) => toggleTimer(id, true );
   const pauseTimer = (id) => toggleTimer(id, false); 
@@ -130,6 +116,8 @@ const App = () => {
           onEditingClick={onEditingClick}
           startTimer={startTimer}
           pauseTimer={pauseTimer}
+          updateTimer={updateTimer}
+          onUpdateLabel={onUpdateLabel}
         />
         <Footer
           activeTasks={activeTasks}
